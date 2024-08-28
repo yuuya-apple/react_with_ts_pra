@@ -8,7 +8,9 @@ interface User {
 }
 
 export function UserList() {
-  const [userList, setUserList] = useState<User[]>();
+  const [userList, setUserList] = useState<User[]>([]);
+  const [searchTxt, setSearchTxt] = useState<string>("");
+  const [displayList, setDisplayList] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,6 +19,7 @@ export function UserList() {
           "https://jsonplaceholder.typicode.com/users"
         );
         setUserList(response.data);
+        setDisplayList(response.data);
       } catch (error) {
       } finally {
       }
@@ -24,9 +27,13 @@ export function UserList() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setDisplayList(userList?.filter((user) => user.name.includes(searchTxt)));
+  }, [searchTxt]);
+
   const displayUserList = () => {
-    return userList?.map((u) => (
-      <tr>
+    return displayList?.map((u) => (
+      <tr key={u.id}>
         <td>{u.id} </td>
         <td>{u.name} </td>
         <td>{u.email} </td>
@@ -36,12 +43,21 @@ export function UserList() {
 
   return (
     <div>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-      </tr>
-      {displayUserList()}
+      <input
+        type="text"
+        value={searchTxt}
+        onChange={(e) => setSearchTxt(e.target.value)}
+      />
+      <table>
+        <thead>
+          <tr key={"head"}>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>{displayUserList()}</tbody>
+      </table>
     </div>
   );
 }

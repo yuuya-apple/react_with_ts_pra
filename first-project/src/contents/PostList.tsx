@@ -9,7 +9,9 @@ interface Post {
 }
 
 export function PostList() {
-  const [postList, setPostList] = useState<Post[]>();
+  const [postList, setPostList] = useState<Post[]>([]);
+  const [searchTxt, setSearchTxt] = useState<string>("");
+  const [displayList, setDisplayList] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +20,7 @@ export function PostList() {
           "https://jsonplaceholder.typicode.com/posts"
         );
         setPostList(response.data);
+        setDisplayList(response.data);
       } catch (error) {
       } finally {
       }
@@ -25,9 +28,13 @@ export function PostList() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setDisplayList(postList?.filter((post) => post.title.includes(searchTxt)));
+  }, [searchTxt]);
+
   const displayPostList = () => {
-    return postList?.map((p) => (
-      <tr>
+    return displayList?.map((p) => (
+      <tr key={p.id}>
         <td>{p.id} </td>
         <td>{p.userId} </td>
         <td>{p.title} </td>
@@ -38,13 +45,22 @@ export function PostList() {
 
   return (
     <div>
-      <tr>
-        <th>ID</th>
-        <th>UserID</th>
-        <th>Title</th>
-        <th>Body</th>
-      </tr>
-      {displayPostList()}
+      <input
+        type="text"
+        value={searchTxt}
+        onChange={(e) => setSearchTxt(e.target.value)}
+      />
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>UserID</th>
+            <th>Title</th>
+            <th>Body</th>
+          </tr>
+        </thead>
+        <tbody>{displayPostList()}</tbody>
+      </table>
     </div>
   );
 }

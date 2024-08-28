@@ -3,7 +3,7 @@ import { UserList } from "./UserList";
 import { PostList } from "./PostList";
 
 export function Main() {
-  const [isUserList, setIsUserList] = useState<boolean>(false);
+  const [isUserList, setIsUserList] = useState<boolean>(true);
 
   const handleUserList = () => setIsUserList(true);
   const handlePostList = () => setIsUserList(false);
