@@ -1,0 +1,11 @@
+version: "3"
+services:
+  node:
+    build:
+      context: .
+    tty: true
+    volumes:
+      - .:/app
+    command: ash -c "cd first-project && npm install && npm run dev"
+    ports:
+      - "3000:3000"
