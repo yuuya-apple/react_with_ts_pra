@@ -6,6 +6,6 @@ services:
     tty: true
     volumes:
       - .:/app
-    command: ash -c "cd first-project && npm install && npm run dev"
+    command: ash -c "npm install && npm run dev"
     ports:
       - "3000:3000"
