@@ -11,5 +11,5 @@ export default defineConfig({
   build: {
     outDir: "build",
   },
-  base: "react_with_ts_pra",
+  base: "/react_with_ts_pra/",
 });
